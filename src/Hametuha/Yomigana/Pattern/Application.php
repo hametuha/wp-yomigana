@@ -92,6 +92,7 @@ abstract class Application extends Singleton {
 		$path = $this->search_template( $template );
 		if ( $path ) {
 			if ( $args ) {
+				// phpcs:ignore WordPress.PHP.DontExtract.extract_extract -- Intentional: expose template args as variables to the included template.
 				extract( $args );
 			}
 			include $path;
@@ -110,6 +111,7 @@ abstract class Application extends Singleton {
 		$path = $this->search_template( $template );
 		if ( $path ) {
 			if ( $args ) {
+				// phpcs:ignore WordPress.PHP.DontExtract.extract_extract -- Intentional: expose template args as variables to the included template.
 				extract( $args );
 			}
 			ob_start();
@@ -144,7 +146,7 @@ abstract class Application extends Singleton {
 	public function __get( $name ) {
 		switch ( $name ) {
 			case 'dir':
-				return dirname( dirname( dirname( dirname( __DIR__ ) ) ) );
+				return dirname( __DIR__, 4 );
 				break;
 			case 'assets':
 				return untrailingslashit( plugin_dir_url( $this->dir . '/assets/hoge' ) );

@@ -16,6 +16,11 @@
 		<exclude name="WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid" />
 	</rule>
 
+	<file>wp-yomigana.php</file>
+	<file>uninstall.php</file>
+	<file>src/</file>
+	<file>templates/</file>
+
 	<exclude-pattern>*/node_modules/*</exclude-pattern>
 	<exclude-pattern>*/vendor/*</exclude-pattern>
 </ruleset>

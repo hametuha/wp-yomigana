@@ -4,7 +4,7 @@ Plugin Name: WP-Yomigana
 Plugin URI: https://wordpress.org/plugins/wp-yomigana/
 Description: You can enter ruby tag in visual editor.
 Version: 2.1.0
-PHP Version: 5.6
+Requires PHP: 7.4
 Author: Takahashi Fumiki
 Author URI: https://takahashifumiki.com
 License: GPL 3.0 or later
@@ -25,7 +25,7 @@ defined( 'ABSPATH' ) || die();
  */
 function yomigana_init() {
 	// Register i18n.
-	load_plugin_textdomain( 'wp-yomigana', false, basename( dirname( __FILE__ ) ) . '/languages' );
+	load_plugin_textdomain( 'wp-yomigana', false, basename( __DIR__ ) . '/languages' );
 	// Check error.
 	$auto_loader = yomigana_error();
 	if ( is_wp_error( $auto_loader ) ) {
@@ -43,12 +43,15 @@ add_action( 'plugins_loaded', 'yomigana_init' );
  * @return WP_Error|string
  */
 function yomigana_error() {
-	$info = get_file_data( __FILE__, [
-		'version' => 'PHP Version'
-	] );
+	$info     = get_file_data(
+		__FILE__,
+		array(
+			'version' => 'PHP Version',
+		)
+	);
 	$required = $info['version'];
 	$current  = phpversion();
-	$path = dirname( __FILE__ ) . '/vendor/autoload.php';
+	$path     = __DIR__ . '/vendor/autoload.php';
 	if ( version_compare( $current, $required, '<' ) ) {
 		// translators: %1$s is requires PHP version, %2$s is current version.
 		return new WP_Error( 'invalid_php_version', sprintf( __( 'WP-Yomigana requires PHP %1$s and later, but your PHP is %2$s', 'wp-yomigana' ), $required, phpversion() ) );

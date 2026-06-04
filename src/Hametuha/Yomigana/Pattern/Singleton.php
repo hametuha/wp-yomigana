@@ -14,7 +14,7 @@ abstract class Singleton {
 	 *
 	 * @var array
 	 */
-	protected static $instances = [];
+	protected static $instances = array();
 
 	/**
 	 * Singleton constructor.
@@ -34,5 +34,4 @@ abstract class Singleton {
 		}
 		return self::$instances[ $class_name ];
 	}
-
 }

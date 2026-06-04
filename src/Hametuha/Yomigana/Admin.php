@@ -18,7 +18,7 @@ class Admin extends Application {
 		// Register admin menu.
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
-		add_action( 'admin_enqueue_scripts', [ $this, 'admin_enqueue_scripts' ] );
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 		// Create plugin link.
 		add_filter( 'plugin_action_links', array( $this, 'plugin_page_link' ), 10, 2 );
 		add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 4 );
@@ -46,9 +46,12 @@ class Admin extends Application {
 		}
 		update_option( 'wp_yomigana_options', $new_option );
 		$message = __( 'Option has been updated.', 'wp-yomigana' );
-		add_action( 'admin_notices', function () use ( $message ) {
-			printf( '<div class="updated"><p>%s</p></div>', $message );
-		} );
+		add_action(
+			'admin_notices',
+			function () use ( $message ) {
+				printf( '<div class="updated"><p>%s</p></div>', $message );
+			}
+		);
 	}
 
 	/**
@@ -56,7 +59,7 @@ class Admin extends Application {
 	 */
 	public function admin_enqueue_scripts() {
 		$url = plugins_url( '/assets/css/ruby-admin.css', $this->dir . '/assets' );
-		wp_enqueue_style( 'wp-yomigana-admin', $url, [], $this::VERSION );
+		wp_enqueue_style( 'wp-yomigana-admin', $url, array(), $this::VERSION );
 	}
 
 	/**

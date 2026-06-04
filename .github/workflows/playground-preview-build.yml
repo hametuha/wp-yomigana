@@ -1,0 +1,17 @@
+name: Playground Preview - Build
+
+on:
+  pull_request:
+    types: [labeled, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    if: >
+      contains(github.event.pull_request.labels.*.name, 'playground') &&
+      (github.event.action != 'labeled' || github.event.label.name == 'playground')
+    uses: tarosky/workflows/.github/workflows/playground-preview-build.yml@main
+    with:
+      build_command: 'composer install --no-dev --prefer-dist && npm install && npm run package'
