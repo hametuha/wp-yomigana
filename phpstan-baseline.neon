@@ -13,12 +13,6 @@ parameters:
 			path: src/Hametuha/Yomigana/Bootstrap.php
 
 		-
-			message: '#^Parameter \#2 \$index of method Hametuha\\Yomigana\\Bootstrap\:\:register_button\(\) expects int, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Hametuha/Yomigana/Bootstrap.php
-
-		-
 			message: '#^Call to function is_string\(\) with string will always evaluate to true\.$#'
 			identifier: function.alreadyNarrowedType
 			count: 2

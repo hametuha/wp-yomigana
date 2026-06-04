@@ -19,17 +19,17 @@ class Bootstrap extends Application {
 		Admin::get_instance();
 		Gutenberg::get_instance();
 		// Add TinyMCE plugins.
-		add_filter( 'mce_external_plugins', [ $this, 'register_plugins' ] );
+		add_filter( 'mce_external_plugins', array( $this, 'register_plugins' ) );
 		// Register buttons.
-		foreach ( [ '', '_2', '_3', '_4' ] as $index => $filter ) {
-			add_filter( 'mce_buttons' . $filter, [ $this, 'register_buttons_' . ( $index + 1 ) ], 10000 );
+		foreach ( array( '', '_2', '_3', '_4' ) as $index => $filter ) {
+			add_filter( 'mce_buttons' . $filter, array( $this, 'register_buttons_' . ( $index + 1 ) ), 10000 );
 		}
 		// Customize TinyMCE setting.
-		add_filter( 'tiny_mce_before_init', [ $this, 'mce_init' ], 1000 );
+		add_filter( 'tiny_mce_before_init', array( $this, 'mce_init' ), 1000 );
 		// Editor helper script.
-		add_action( 'wp_enqueue_editor', [ $this, 'mce_helper' ] );
+		add_action( 'wp_enqueue_editor', array( $this, 'mce_helper' ) );
 		// Avoid ruby tag to be deleted.
-		add_filter( 'wp_kses_allowed_html', [ $this, 'kses_allowed_html' ], 10, 2 );
+		add_filter( 'wp_kses_allowed_html', array( $this, 'kses_allowed_html' ), 10, 2 );
 	}
 
 	/**
@@ -42,11 +42,11 @@ class Bootstrap extends Application {
 	 */
 	private function register_button( $buttons, $index ) {
 		foreach ( $this->option as $tag => $array ) {
-			if ( $this->get_row_index( $tag ) != $index ) {
+			if ( $this->get_row_index( $tag ) !== $index ) {
 				continue;
 			}
 			$insert_index = $this->get_column_index( $tag );
-			if ( 0 == $insert_index ) {
+			if ( 0 === $insert_index ) {
 				$new_buttons = array_merge( array( $tag ), $buttons );
 			} elseif ( $insert_index >= count( $buttons ) ) {
 				$new_buttons = array_merge( $buttons, array( $tag ) );
@@ -54,11 +54,11 @@ class Bootstrap extends Application {
 				$new_buttons = array();
 				$counter     = 1;
 				foreach ( $buttons as $button ) {
-					if ( $counter == $insert_index ) {
+					if ( $counter === $insert_index ) {
 						$new_buttons[] = $tag;
 					}
 					$new_buttons[] = $button;
-					$counter ++;
+					++$counter;
 				}
 			}
 			$buttons = $new_buttons;
@@ -74,7 +74,7 @@ class Bootstrap extends Application {
 	 *
 	 * @return array
 	 */
-	function register_plugins( $plugin_array ) {
+	public function register_plugins( $plugin_array ) {
 		$plugin_array['yomigana'] = $this->assets . '/js/dist/editor_plugin.js';
 
 		return $plugin_array;
@@ -87,23 +87,27 @@ class Bootstrap extends Application {
 	 */
 	public function mce_helper( $setting ) {
 		if ( $setting['tinymce'] ) {
-			wp_enqueue_style( 'jquery-ui-mp6', plugins_url( 'assets/css/jquery-ui.css', $this->dir . '/assets' ), [], '1.0.2' );
+			wp_enqueue_style( 'jquery-ui-mp6', plugins_url( 'assets/css/jquery-ui.css', $this->dir . '/assets' ), array(), '1.0.2' );
 			wp_enqueue_script( 'wp-yomigana-editor-helper', $this->assets . '/js/dist/editor-helper.js', array( 'jquery-ui-dialog' ), static::VERSION, true );
-			wp_localize_script( 'wp-yomigana-editor-helper', 'WpYomigana', array(
-				'dl'        => __( 'Definition List', 'wp-yomigana' ),
-				'dlToggle'  => __( 'Apply / Strip', 'wp-yomigana' ),
-				'dtToggle'  => __( 'Switch term and definition', 'wp-yomigana' ),
-				'q'         => __( 'Inline Quote', 'wp-yomigana' ),
-				'qForm'     => $this->get_template_string( 'q' ),
-				'small'     => __( 'Annotation', 'wp-yomigana' ),
-				'cite'      => __( 'Cite', 'wp-yomigana' ),
-				'ruby'      => __( 'Ruby', 'wp-yomigana' ),
-				'rubyForm'  => $this->get_template_string( 'ruby' ),
-				'imageBase' => $this->assets . '/img/dist/',
-				'close'     => __( 'Cancel', 'wp-yomigana' ),
-				'ok'        => __( 'OK', 'wp-yomigana' ),
-				'unwrap'    => __( 'Delete', 'wp-yomigana' ),
-			) );
+			wp_localize_script(
+				'wp-yomigana-editor-helper',
+				'WpYomigana',
+				array(
+					'dl'        => __( 'Definition List', 'wp-yomigana' ),
+					'dlToggle'  => __( 'Apply / Strip', 'wp-yomigana' ),
+					'dtToggle'  => __( 'Switch term and definition', 'wp-yomigana' ),
+					'q'         => __( 'Inline Quote', 'wp-yomigana' ),
+					'qForm'     => $this->get_template_string( 'q' ),
+					'small'     => __( 'Annotation', 'wp-yomigana' ),
+					'cite'      => __( 'Cite', 'wp-yomigana' ),
+					'ruby'      => __( 'Ruby', 'wp-yomigana' ),
+					'rubyForm'  => $this->get_template_string( 'ruby' ),
+					'imageBase' => $this->assets . '/img/dist/',
+					'close'     => __( 'Cancel', 'wp-yomigana' ),
+					'ok'        => __( 'OK', 'wp-yomigana' ),
+					'unwrap'    => __( 'Delete', 'wp-yomigana' ),
+				)
+			);
 		}
 	}
 
@@ -136,13 +140,13 @@ class Bootstrap extends Application {
 	public function kses_allowed_html( $tags, $context ) {
 		foreach (
 			array(
-				'ruby' => [
+				'ruby' => array(
 					'id'    => true,
 					'name'  => true,
 					'class' => true,
 					'title' => true,
-				],
-				'rt'   => [],
+				),
+				'rt'   => array(),
 			) as $tag_name => $setting
 		) {
 			if ( ! isset( $tags[ $tag_name ] ) ) {
@@ -163,7 +167,7 @@ class Bootstrap extends Application {
 	 */
 	public function __call( $name, $arguments ) {
 		if ( preg_match( '/register_buttons_([0-9])/', $name, $match ) ) {
-			return $this->register_button( $arguments[0], $match[1] );
+			return $this->register_button( $arguments[0], (int) $match[1] );
 		}
 	}
 }
