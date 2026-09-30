@@ -20,7 +20,7 @@ registerFormatType( 'wp-yomigana/q', {
     const onToggle = () => {
       let cite = '';
       if ( ! isActive ) {
-        cite = window.prompt( __( 'Enter source information(optional)', 'wp-yomigana' ) ) || '';
+        cite = window.prompt( __( 'Enter source URL (optional)', 'wp-yomigana' ) ) || '';
       }
       return onChange( toggleFormat( value, {
         type: 'wp-yomigana/q',
