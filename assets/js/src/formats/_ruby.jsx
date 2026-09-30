@@ -28,9 +28,12 @@ registerFormatType( 'wp-yomigana/ruby', {
   edit ({ isActive, value, onChange }) {
 
     const onToggle = () => {
-      let ruby = '';
       if ( ! isActive ) {
-        ruby = window.prompt( __( 'Enter ruby characters', 'wp-yomigana' ) ) || value.text.substr( value.start, value.end -value.start );
+        const ruby = ( window.prompt( __( 'Enter ruby characters', 'wp-yomigana' ) ) || '' ).trim();
+        if ( ! ruby ) {
+          // Cancelled or empty.
+          return;
+        }
         const rubyEnd   = value.end;
         const rubyStart = value.start;
         value = insert( value, ruby, rubyEnd );

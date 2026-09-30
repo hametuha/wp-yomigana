@@ -75,7 +75,8 @@ class Bootstrap extends Application {
 	 * @return array
 	 */
 	public function register_plugins( $plugin_array ) {
-		$plugin_array['yomigana'] = $this->assets . '/js/dist/editor_plugin.js';
+		// TinyMCE caches external plugins by WordPress version, so add our own.
+		$plugin_array['yomigana'] = add_query_arg( 'ver', $this->asset_version( 'js/dist/editor_plugin.js' ), $this->assets . '/js/dist/editor_plugin.js' );
 
 		return $plugin_array;
 	}
@@ -88,7 +89,7 @@ class Bootstrap extends Application {
 	public function mce_helper( $setting ) {
 		if ( $setting['tinymce'] ) {
 			wp_enqueue_style( 'wp-jquery-ui-dialog' );
-			wp_enqueue_script( 'wp-yomigana-editor-helper', $this->assets . '/js/dist/editor-helper.js', array( 'jquery-ui-dialog' ), $this->version, true );
+			wp_enqueue_script( 'wp-yomigana-editor-helper', $this->assets . '/js/dist/editor-helper.js', array( 'jquery-ui-dialog' ), $this->asset_version( 'js/dist/editor-helper.js' ), true );
 			wp_localize_script(
 				'wp-yomigana-editor-helper',
 				'WpYomigana',
