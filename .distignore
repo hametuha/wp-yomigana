@@ -3,7 +3,9 @@
 .git
 .github
 .gitignore
+.idea
 .node-version
+.wp-env.json
 node_modules
 package.json
 package-lock.json
@@ -11,6 +13,9 @@ phpcs.ruleset.xml
 phpstan.neon
 phpstan-baseline.neon
 phpstan-bootstrap.php
+phpunit.xml.dist
 composer.json
 composer.lock
+README.md
+tasks
 tests

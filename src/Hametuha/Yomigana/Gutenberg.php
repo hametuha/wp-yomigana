@@ -16,53 +16,45 @@ class Gutenberg extends Application {
 	 * Constructor
 	 */
 	protected function __construct() {
-		if ( ! function_exists( 'register_block_type' ) ) {
-			return;
-		}
 		add_action( 'init', array( $this, 'register_script' ), 10 );
 		add_action( 'init', array( $this, 'register_block' ), 11 );
 		add_action( 'enqueue_block_editor_assets', array( $this, 'block_editor_assets' ) );
 	}
 
 	/**
+	 * Register script built by wp-scripts.
+	 *
+	 * @param string   $handle     Script handle.
+	 * @param string   $name       File name without extension in assets/js/dist.
+	 * @param string[] $extra_deps Additional dependencies.
+	 */
+	private function register_built_script( $handle, $name, $extra_deps = array() ) {
+		$asset_file = $this->dir . '/assets/js/dist/' . $name . '.asset.php';
+		$asset      = file_exists( $asset_file ) ? require $asset_file : array(
+			'dependencies' => array(),
+			'version'      => $this->version,
+		);
+		wp_register_script(
+			$handle,
+			$this->assets . '/js/dist/' . $name . '.js',
+			array_merge( $asset['dependencies'], $extra_deps ),
+			$asset['version'],
+			true
+		);
+		wp_set_script_translations( $handle, 'wp-yomigana', $this->dir . '/languages' );
+	}
+
+	/**
 	 * Register scripts.
 	 */
 	public function register_script() {
-		// Ruby, etc
-		wp_register_script(
-			'wp-yomigana-gutenberg',
-			$this->assets . '/js/dist/wp-yomigana-gutenberg.js',
-			array(
-				'wp-element',
-				'wp-editor',
-				'wp-i18n',
-				'wp-rich-text',
-				'wp-compose',
-				'wp-components',
-			),
-			self::VERSION,
-			true
-		);
-		// Register DL.
-		wp_register_script( 'wp-yomigana-dl', $this->assets . '/js/dist/definition-list.js', array( 'wp-blocks', 'wp-editor', 'wp-i18n' ), self::VERSION, true );
-		wp_register_style( 'wp-yomigana-dl', $this->assets . '/css/editor-dl.css', array( 'wp-editor' ), self::VERSION );
-		// Register dt
-		wp_register_script( 'wp-yomigana-dt', $this->assets . '/js/dist/definition-term.js', array( 'wp-yomigana-dl' ), self::VERSION, true );
-		// Register dd
-		wp_register_script( 'wp-yomigana-dd', $this->assets . '/js/dist/definition-description.js', array( 'wp-yomigana-dl' ), self::VERSION, true );
-		// Register translation.
-		if ( function_exists( 'wp_set_script_translations' ) ) {
-			// For WordPress 5.0
-			wp_set_script_translations( 'wp-yomigana-dl', 'wp-yomigana', plugin_dir_path( dirname( __DIR__, 2 ) ) . 'languages' );
-		} elseif ( function_exists( 'gutenberg_get_jed_locale_data' ) ) {
-			// For gutenberg only.
-			$json = json_encode( gutenberg_get_jed_locale_data( 'wp-yomigana' ) );
-			wp_add_inline_script(
-				'wp-yomigana-dl',
-				sprintf( 'wp.i18n.setLocaleData(  %s, "wp-yomigana" );', $json ),
-				'before'
-			);
-		}
+		// Ruby, etc.
+		$this->register_built_script( 'wp-yomigana-gutenberg', 'wp-yomigana-gutenberg' );
+		// Definition list.
+		$this->register_built_script( 'wp-yomigana-dl', 'definition-list' );
+		wp_register_style( 'wp-yomigana-dl', $this->assets . '/css/editor-dl.css', array(), $this->asset_version( 'css/editor-dl.css' ) );
+		$this->register_built_script( 'wp-yomigana-dt', 'definition-term', array( 'wp-yomigana-dl' ) );
+		$this->register_built_script( 'wp-yomigana-dd', 'definition-description', array( 'wp-yomigana-dl' ) );
 	}
 
 	/**
@@ -77,13 +69,13 @@ class Gutenberg extends Application {
 			)
 		);
 		register_block_type(
-			'wp-yomigana/dt',
+			'wp-yomigana/term',
 			array(
 				'editor_script' => 'wp-yomigana-dt',
 			)
 		);
 		register_block_type(
-			'wp-yomigana/dd',
+			'wp-yomigana/description',
 			array(
 				'editor_script' => 'wp-yomigana-dd',
 			)

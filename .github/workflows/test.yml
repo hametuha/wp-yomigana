@@ -1,6 +1,9 @@
 name: WordPress Plugin Test
 
 on:
+  push:
+    branches:
+      - master
   pull_request:
     branches:
       - master
@@ -32,10 +35,27 @@ jobs:
   phplint:
     uses: tarosky/workflows/.github/workflows/phplint.yml@main
 
+  assets:
+    name: Build Assets
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.node-version'
+
+      - name: Install NPM Dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Build assets
+        run: npm run package
+
   status:
     name: Status Check
     runs-on: ubuntu-latest
-    needs: [ phpcs, phpstan, phplint ]
+    needs: [ phpcs, phpstan, phplint, assets ]
     if: always()
     steps:
       - uses: re-actors/alls-green@release/v1

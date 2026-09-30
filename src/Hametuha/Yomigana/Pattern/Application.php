@@ -9,14 +9,10 @@ namespace Hametuha\Yomigana\Pattern;
  * @property-read array $option
  * @property-read string $dir
  * @property-read string $assets
+ * @property-read string $version
  */
 abstract class Application extends Singleton {
 
-
-	/**
-	 * @const string
-	 */
-	const VERSION = '2.0.3';
 
 	/**
 	 * @const string
@@ -126,6 +122,19 @@ abstract class Application extends Singleton {
 	}
 
 	/**
+	 * Get asset version from file modification time.
+	 *
+	 * @param string $rel_path Path relative to assets directory.
+	 *
+	 * @return string
+	 */
+	protected function asset_version( $rel_path ) {
+		$path = $this->dir . '/assets/' . ltrim( $rel_path, '/' );
+
+		return file_exists( $path ) ? (string) filemtime( $path ) : $this->version;
+	}
+
+	/**
 	 * Search template
 	 *
 	 * @param string $template
@@ -141,13 +150,21 @@ abstract class Application extends Singleton {
 	/**
 	 * @param string $name
 	 *
-	 * @return null
+	 * @return string|array|null
 	 */
 	public function __get( $name ) {
 		switch ( $name ) {
 			case 'dir':
 				return dirname( __DIR__, 4 );
 				break;
+			case 'version':
+				static $version = null;
+				if ( is_null( $version ) ) {
+					$data    = get_file_data( $this->dir . '/wp-yomigana.php', array( 'version' => 'Version' ) );
+					$version = $data['version'];
+				}
+
+				return $version;
 			case 'assets':
 				return untrailingslashit( plugin_dir_url( $this->dir . '/assets/hoge' ) );
 				break;

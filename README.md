@@ -1,12 +1,12 @@
 # WP-Yomigana
 
-Contributors: Takahashi_Fumiki  
-Tags: wysiwyg, tinymce, ruby, dl, cite, q, small, css3, html5, block-editor  
-Requires at least: 5.0  
-Tested up to: 5.3  
-Requires PHP: 5.6  
-Stable tag: 2.1.0  
-Lisence: GPL 3.0 or later
+Contributors: hametuha, Takahashi_Fumiki  
+Tags: ruby, dl, cite, q, small  
+Requires at least: 6.6  
+Tested up to: 7.1  
+Requires PHP: 7.4  
+Stable tag: nightly  
+License: GPL 3.0 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 ## Description
@@ -24,7 +24,7 @@ License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 ### 貢献
 
-ソースコードは[Github](https://github.com/fumikito/wp-yomigana)にホストしているので、気軽にプルリク、イシューなどお送りください。
+ソースコードは[GitHub](https://github.com/hametuha/wp-yomigana)にホストしているので、気軽にプルリク、イシューなどお送りください。
 
 ## Installation
 
@@ -42,6 +42,13 @@ License URI: https://www.gnu.org/licenses/gpl-3.0.html
 3. クラシックエディターでも使えます。
 
 ## Changelog
+
+### 2.2.0
+
+- WordPress 7.1 に対応。ブロックエディターのiframe表示に対応しました。
+- 必要なWordPressのバージョンを6.6以上、PHPのバージョンを7.4以上に変更。
+- 引用（qタグ）の出典（cite属性）が再読み込み時に失われる不具合を修正。
+- ビルドツールを刷新。
 
 ### 2.1.0
 

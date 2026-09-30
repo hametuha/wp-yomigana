@@ -2,11 +2,12 @@
 /**
 Plugin Name: WP-Yomigana
 Plugin URI: https://wordpress.org/plugins/wp-yomigana/
-Description: You can enter ruby tag in visual editor.
-Version: 2.1.0
+Description: You can enter ruby tag in block editor and classic editor.
+Version: nightly
+Requires at least: 6.6
 Requires PHP: 7.4
-Author: Takahashi Fumiki
-Author URI: https://takahashifumiki.com
+Author: Hametuha
+Author URI: https://hametuha.co.jp
 License: GPL 3.0 or later
 Text Domain: wp-yomigana
 Domain Path: /languages
@@ -43,19 +44,8 @@ add_action( 'plugins_loaded', 'yomigana_init' );
  * @return WP_Error|string
  */
 function yomigana_error() {
-	$info     = get_file_data(
-		__FILE__,
-		array(
-			'version' => 'PHP Version',
-		)
-	);
-	$required = $info['version'];
-	$current  = phpversion();
-	$path     = __DIR__ . '/vendor/autoload.php';
-	if ( version_compare( $current, $required, '<' ) ) {
-		// translators: %1$s is requires PHP version, %2$s is current version.
-		return new WP_Error( 'invalid_php_version', sprintf( __( 'WP-Yomigana requires PHP %1$s and later, but your PHP is %2$s', 'wp-yomigana' ), $required, phpversion() ) );
-	} elseif ( ! file_exists( $path ) ) {
+	$path = __DIR__ . '/vendor/autoload.php';
+	if ( ! file_exists( $path ) ) {
 		// translators: %s is file path.
 		return new WP_Error( 'no_composer', sprintf( __( 'WP-Yomigana\'s auto load file %s is not found.', 'wp-yomigana' ), $path ) );
 	} else {

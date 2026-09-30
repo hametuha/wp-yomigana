@@ -2,13 +2,16 @@
 /**
  * PHPUnit bootstrap file
  *
- * @package Never_Let_Me_Go
+ * @package wp-yomigana
  */
 
 $_tests_dir = getenv( 'WP_TESTS_DIR' );
 if ( ! $_tests_dir ) {
 	$_tests_dir = '/tmp/wordpress-tests';
 }
+
+// Load PHPUnit Polyfills.
+require_once dirname( __DIR__ ) . '/vendor/yoast/phpunit-polyfills/phpunitpolyfills-autoload.php';
 
 // Give access to tests_add_filter() function.
 require_once $_tests_dir . '/includes/functions.php';

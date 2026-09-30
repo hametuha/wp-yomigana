@@ -49,7 +49,7 @@ class Admin extends Application {
 		add_action(
 			'admin_notices',
 			function () use ( $message ) {
-				printf( '<div class="updated"><p>%s</p></div>', $message );
+				printf( '<div class="updated"><p>%s</p></div>', esc_html( $message ) );
 			}
 		);
 	}
@@ -59,7 +59,7 @@ class Admin extends Application {
 	 */
 	public function admin_enqueue_scripts() {
 		$url = plugins_url( '/assets/css/ruby-admin.css', $this->dir . '/assets' );
-		wp_enqueue_style( 'wp-yomigana-admin', $url, array(), $this::VERSION );
+		wp_enqueue_style( 'wp-yomigana-admin', $url, array(), $this->asset_version( 'css/ruby-admin.css' ) );
 	}
 
 	/**
@@ -107,7 +107,7 @@ class Admin extends Application {
 	 */
 	public function plugin_row_meta( $plugin_meta, $plugin_file, $plugin_data, $status ) {
 		if ( false !== strpos( $plugin_file, 'wp-yomigana' ) ) {
-			$plugin_meta[] = sprintf( '<a href="https://github.com/fumikito/WP-Yomigana">Github</a>' );
+			$plugin_meta[] = sprintf( '<a href="https://github.com/hametuha/wp-yomigana">Github</a>' );
 		}
 
 		return $plugin_meta;
