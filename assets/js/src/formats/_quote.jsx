@@ -20,14 +20,19 @@ registerFormatType( 'wp-yomigana/q', {
     const onToggle = () => {
       let cite = '';
       if ( ! isActive ) {
-        cite = window.prompt( __( 'Enter source information(optional)', 'wp-yomigana' ) ) || '';
-      }
-      return onChange( toggleFormat( value, {
-        type: 'wp-yomigana/q',
-        attributes: {
-          cite: cite,
+        const input = window.prompt( __( 'Enter source URL (optional)', 'wp-yomigana' ) );
+        if ( null === input ) {
+          // Cancelled.
+          return;
         }
-      } ) );
+        cite = input.trim();
+      }
+      const format = { type: 'wp-yomigana/q' };
+      if ( cite ) {
+        // Omit empty cite attribute.
+        format.attributes = { cite };
+      }
+      return onChange( toggleFormat( value, format ) );
     };
 
     // @see keycodes/src/index.js

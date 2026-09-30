@@ -14,7 +14,7 @@
 		<tr>
 			<td><label for="rubyText"><?php esc_html_e( 'Ruby', 'wp-yomigana' ); ?></label></td>
 			<td>
-				<input id="rubyText" name="rubyText" type="text" value="" class="" />
+				<input id="rubyText" name="rubyText" type="text" value="" class="" autofocus />
 			</td>
 		</tr>
 	</table>

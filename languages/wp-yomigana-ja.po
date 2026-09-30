@@ -73,16 +73,16 @@ msgid "Delete"
 msgstr "削除"
 
 #: templates/q.php:5
-msgid "Enter source of citation. If not set, cite attribute will be empty."
-msgstr "引用元を入力してください。設定しない場合、cite属性は空になります。"
+msgid "Enter URL of the quotation source. If not set, cite attribute will be empty."
+msgstr "引用元のURLを入力してください。設定しない場合、cite属性は空になります。"
 
 #: templates/q.php:8
 msgid "Citation"
 msgstr "引用文"
 
 #: templates/q.php:14
-msgid "Source / URL"
-msgstr "引用元 / URL"
+msgid "Source URL"
+msgstr "引用元URL"
 
 #: templates/ruby.php:6
 msgid "Enter ruby annotation."
@@ -137,8 +137,8 @@ msgid "Term"
 msgstr "用語"
 
 #: assets/js/src/formats/_quote.jsx:24
-msgid "Enter source information(optional)"
-msgstr "引用元を入力してください（オプション）"
+msgid "Enter source URL (optional)"
+msgstr "引用元のURLを入力してください（オプション）"
 
 #: assets/js/src/formats/_quote.jsx:45
 msgid "Inline Quotation"

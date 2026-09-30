@@ -23,7 +23,7 @@ abstract class Application extends Singleton {
 	 * @var array
 	 */
 	private $default_option = array(
-		'ruby'  => false,
+		'ruby'  => array( 1, 1 ),
 		'small' => false,
 		'dl'    => false,
 		'q'     => false,

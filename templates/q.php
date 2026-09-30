@@ -2,7 +2,7 @@
 /** @var \Hametuha\Yomigana\Bootstrap $this */
 ?>
 <div>
-	<p class="description"><?php esc_html_e( 'Enter source of citation. If not set, cite attribute will be empty.', 'wp-yomigana' ); ?></p>
+	<p class="description"><?php esc_html_e( 'Enter URL of the quotation source. If not set, cite attribute will be empty.', 'wp-yomigana' ); ?></p>
 	<table class="form-table">
 		<tr>
 			<td><label for="citeText"><?php esc_html_e( 'Citation', 'wp-yomigana' ); ?></label></td>
@@ -11,9 +11,9 @@
 			</td>
 		</tr>
 		<tr>
-			<td><label for="citeFrom"><?php esc_html_e( 'Source / URL', 'wp-yomigana' ); ?></label></td>
+			<td><label for="citeFrom"><?php esc_html_e( 'Source URL', 'wp-yomigana' ); ?></label></td>
 			<td>
-				<input id="citeFrom" name="citeFrom" type="text" value="" class="" />
+				<input id="citeFrom" name="citeFrom" type="url" value="" class="" autofocus />
 			</td>
 		</tr>
 	</table>

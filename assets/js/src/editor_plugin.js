@@ -152,12 +152,14 @@ tinymce.PluginManager.add('yomigana', function(editor, url) {
                 switch( action ){
                     case 'set':
                         let origText = $modal.find('#citeText').val(),
-                            citeText = $modal.find('#citeFrom').val();
+                            citeText = $modal.find('#citeFrom').val().trim();
                         if( create ){
                             // This is first
                             let newQ = document.createElement('q');
                             newQ.appendChild(document.createTextNode(origText));
-                            newQ.cite = citeText;
+                            if( citeText ){
+                                newQ.cite = citeText;
+                            }
                             editor.selection.setNode(newQ);
                         }else{
                             // Already exist

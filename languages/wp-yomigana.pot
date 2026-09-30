@@ -83,7 +83,7 @@ msgid "Delete"
 msgstr ""
 
 #: templates/q.php:5
-msgid "Enter source of citation. If not set, cite attribute will be empty."
+msgid "Enter URL of the quotation source. If not set, cite attribute will be empty."
 msgstr ""
 
 #: templates/q.php:8
@@ -91,7 +91,7 @@ msgid "Citation"
 msgstr ""
 
 #: templates/q.php:14
-msgid "Source / URL"
+msgid "Source URL"
 msgstr ""
 
 #: templates/ruby.php:6
@@ -147,7 +147,7 @@ msgid "Term"
 msgstr ""
 
 #: assets/js/src/formats/_quote.jsx:24
-msgid "Enter source information(optional)"
+msgid "Enter source URL (optional)"
 msgstr ""
 
 #: assets/js/src/formats/_quote.jsx:45
