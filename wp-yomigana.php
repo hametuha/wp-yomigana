@@ -10,7 +10,6 @@ Author: Hametuha
 Author URI: https://hametuha.co.jp
 License: GPL 3.0 or later
 Text Domain: wp-yomigana
-Domain Path: /languages
 
 This plugins owes a lot to TinyMCE Advanced, a WordPress plugin(https://wordpress.org/extend/plugins/tinymce-advanced/).
 
@@ -25,11 +24,9 @@ defined( 'ABSPATH' ) || die();
  * @ignore
  */
 function yomigana_init() {
-	// Register i18n.
-	load_plugin_textdomain( 'wp-yomigana', false, basename( __DIR__ ) . '/languages' );
-	// Check error.
-	$auto_loader = yomigana_error();
-	if ( is_wp_error( $auto_loader ) ) {
+	// Translations are loaded just in time from WordPress.org language packs.
+	$auto_loader = __DIR__ . '/vendor/autoload.php';
+	if ( ! file_exists( $auto_loader ) ) {
 		add_action( 'admin_notices', 'yomigana_notice' );
 	} else {
 		require $auto_loader;

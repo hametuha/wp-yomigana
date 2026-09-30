@@ -9,3 +9,4 @@ assets/css
 assets/js/dist
 /tasks/
 .phpunit.result.cache
+/languages/
