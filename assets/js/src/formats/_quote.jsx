@@ -1,7 +1,8 @@
-import { Fragment } from '@wordpress/element';
+import { Fragment, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { toggleFormat, registerFormatType } from '@wordpress/rich-text';
 import { RichTextToolbarButton, RichTextShortcut } from '@wordpress/block-editor';
+import InputPopover from './_input-popover';
 
 registerFormatType( 'wp-yomigana/q', {
 
@@ -15,24 +16,32 @@ registerFormatType( 'wp-yomigana/q', {
 
   className: null,
 
-  edit ({ isActive, value, onChange }) {
+  edit ({ isActive, value, onChange, onFocus, contentRef }) {
+
+    const [ isOpen, setIsOpen ] = useState( false );
 
     const onToggle = () => {
-      let cite = '';
-      if ( ! isActive ) {
-        const input = window.prompt( __( 'Enter source URL (optional)', 'wp-yomigana' ) );
-        if ( null === input ) {
-          // Cancelled.
-          return;
-        }
-        cite = input.trim();
+      if ( isActive ) {
+        onChange( toggleFormat( value, { type: 'wp-yomigana/q' } ) );
+      } else {
+        setIsOpen( true );
       }
+    };
+
+    const onSubmit = ( cite ) => {
+      setIsOpen( false );
       const format = { type: 'wp-yomigana/q' };
       if ( cite ) {
         // Omit empty cite attribute.
         format.attributes = { cite };
       }
-      return onChange( toggleFormat( value, format ) );
+      onChange( toggleFormat( value, format ) );
+      onFocus();
+    };
+
+    const onClose = () => {
+      setIsOpen( false );
+      onFocus();
     };
 
     // @see keycodes/src/index.js
@@ -48,6 +57,11 @@ registerFormatType( 'wp-yomigana/q', {
         <RichTextShortcut type={shortcutType} character={shortcutCharacter} onUse={onToggle}  />
         <RichTextToolbarButton icon={icon} title={__( 'Inline Quotation', 'wp-yomigana' )} onClick={onToggle}
           isActive={isActive} shortcutType={shortcutType} shortcutCharacter={shortcutCharacter} />
+        { isOpen && (
+          <InputPopover contentRef={ contentRef } settings={ { tagName: 'q', className: null, isActive } }
+            label={ __( 'Source URL', 'wp-yomigana' ) } help={ __( 'Optional. Leave empty to omit the cite attribute.', 'wp-yomigana' ) } type="url"
+            onSubmit={ onSubmit } onClose={ onClose } onFocusOutside={ () => setIsOpen( false ) } />
+        ) }
       </Fragment>
     )
   }

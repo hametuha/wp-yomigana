@@ -1,7 +1,8 @@
-import { Fragment } from '@wordpress/element';
+import { Fragment, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { toggleFormat, registerFormatType, insert, applyFormat } from '@wordpress/rich-text';
 import { RichTextToolbarButton, RichTextShortcut } from '@wordpress/block-editor';
+import InputPopover from './_input-popover';
 
 registerFormatType( 'wp-yomigana/rt', {
 
@@ -25,32 +26,40 @@ registerFormatType( 'wp-yomigana/ruby', {
 
   className: null,
 
-  edit ({ isActive, value, onChange }) {
+  edit ({ isActive, value, onChange, onFocus, contentRef }) {
+
+    const [ isOpen, setIsOpen ] = useState( false );
 
     const onToggle = () => {
-      if ( ! isActive ) {
-        const ruby = ( window.prompt( __( 'Enter ruby characters', 'wp-yomigana' ) ) || '' ).trim();
-        if ( ! ruby ) {
-          // Cancelled or empty.
-          return;
-        }
-        const rubyEnd   = value.end;
-        const rubyStart = value.start;
-        value = insert( value, ruby, rubyEnd );
-        value.start = rubyStart;
-        value.end   = rubyEnd + ruby.length;
-        value = applyFormat( value, {
+      if ( isActive ) {
+        onChange( toggleFormat( value, {
           type: 'wp-yomigana/ruby'
-        }, rubyStart, rubyEnd + ruby.length );
-        value = applyFormat( value, {
-          type: 'wp-yomigana/rt'
-        }, rubyEnd, rubyEnd + ruby.length );
+        } ) );
       } else {
-        value = toggleFormat( value, {
-          type: 'wp-yomigana/ruby'
-        } );
+        setIsOpen( true );
       }
-      return onChange( value );
+    };
+
+    const onSubmit = ( ruby ) => {
+      setIsOpen( false );
+      const rubyEnd   = value.end;
+      const rubyStart = value.start;
+      let newValue = insert( value, ruby, rubyEnd );
+      newValue.start = rubyStart;
+      newValue.end   = rubyEnd + ruby.length;
+      newValue = applyFormat( newValue, {
+        type: 'wp-yomigana/ruby'
+      }, rubyStart, rubyEnd + ruby.length );
+      newValue = applyFormat( newValue, {
+        type: 'wp-yomigana/rt'
+      }, rubyEnd, rubyEnd + ruby.length );
+      onChange( newValue );
+      onFocus();
+    };
+
+    const onClose = () => {
+      setIsOpen( false );
+      onFocus();
     };
 
     // @see keycodes/src/index.js
@@ -69,6 +78,11 @@ registerFormatType( 'wp-yomigana/ruby', {
         <RichTextShortcut type={shortcutType} character={shortcutCharacter} onUse={onToggle}  />
         <RichTextToolbarButton icon={icon} title={ __( 'Ruby', 'wp-yomigana' ) } onClick={onToggle}
                                isActive={isActive} shortcutType={shortcutType} shortcutCharacter={shortcutCharacter} />
+        { isOpen && (
+          <InputPopover contentRef={ contentRef } settings={ { tagName: 'ruby', className: null, isActive } }
+            label={ __( 'Enter ruby characters', 'wp-yomigana' ) } required
+            onSubmit={ onSubmit } onClose={ onClose } onFocusOutside={ () => setIsOpen( false ) } />
+        ) }
       </Fragment>
     )
   }
