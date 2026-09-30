@@ -13,7 +13,7 @@
 		<tr>
 			<td><label for="citeFrom"><?php esc_html_e( 'Source / URL', 'wp-yomigana' ); ?></label></td>
 			<td>
-				<input id="citeFrom" name="citeFrom" type="text" value="" class="" />
+				<input id="citeFrom" name="citeFrom" type="text" value="" class="" autofocus />
 			</td>
 		</tr>
 	</table>
