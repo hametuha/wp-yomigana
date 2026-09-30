@@ -51,8 +51,8 @@ jobs:
           generate-zip: true
         env:
           SLUG: wp-yomigana
-          SVN_USERNAME: ${{ secrets.WP_ORG_USER_FUMIKI }}
-          SVN_PASSWORD: ${{ secrets.WP_ORG_PASS_FUMIKI }}
+          SVN_USERNAME: ${{ secrets.WP_ORG_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.WP_ORG_PASSWORD }}
 
       - name: Upload release asset
         run: gh release upload ${{ github.event.release.tag_name }} ${{ github.workspace }}/wp-yomigana.zip --clobber

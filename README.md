@@ -1,7 +1,7 @@
 # WP-Yomigana
 
-Contributors: Takahashi_Fumiki  
-Tags: wysiwyg, tinymce, ruby, dl, cite, q, small, css3, html5, block-editor  
+Contributors: hametuha, Takahashi_Fumiki  
+Tags: ruby, dl, cite, q, small  
 Requires at least: 6.6  
 Tested up to: 7.1  
 Requires PHP: 7.4  

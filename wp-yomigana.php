@@ -6,8 +6,8 @@ Description: You can enter ruby tag in block editor and classic editor.
 Version: nightly
 Requires at least: 6.6
 Requires PHP: 7.4
-Author: Takahashi Fumiki
-Author URI: https://takahashifumiki.com
+Author: Hametuha
+Author URI: https://hametuha.co.jp
 License: GPL 3.0 or later
 Text Domain: wp-yomigana
 Domain Path: /languages
