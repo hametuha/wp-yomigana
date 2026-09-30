@@ -1,0 +1,60 @@
+name: Deploy to WordPress.org
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  deploy:
+    name: Deploy to WordPress.org
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://wordpress.org/plugins/wp-yomigana/
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP with composer v2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.4
+          tools: composer
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.node-version'
+
+      - name: Build package
+        run: |
+          composer install --no-dev --prefer-dist --no-progress
+          npm ci --no-audit --no-fund
+          npm run package
+
+      - name: Generate readme.txt
+        uses: tarosky/workflows/actions/wp-readme@main
+
+      - name: Versioning
+        uses: tarosky/workflows/actions/versioning@main
+        with:
+          version: ${{ github.event.release.tag_name }}
+          files: readme.txt,wp-yomigana.php
+
+      - name: Deploy to WordPress Directory
+        uses: 10up/action-wordpress-plugin-deploy@stable
+        with:
+          generate-zip: true
+        env:
+          SLUG: wp-yomigana
+          SVN_USERNAME: ${{ secrets.WP_ORG_USER_FUMIKI }}
+          SVN_PASSWORD: ${{ secrets.WP_ORG_PASS_FUMIKI }}
+
+      - name: Upload release asset
+        run: gh release upload ${{ github.event.release.tag_name }} ${{ github.workspace }}/wp-yomigana.zip --clobber
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
