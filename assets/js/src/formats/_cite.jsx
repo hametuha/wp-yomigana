@@ -1,7 +1,7 @@
-const { Fragment } = wp.element;
-const { __ } = wp.i18n;
-const { toggleFormat, registerFormatType } = wp.richText;
-const { RichTextToolbarButton, RichTextShortcut } = wp.editor;
+import { Fragment } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
+import { toggleFormat, registerFormatType } from '@wordpress/rich-text';
+import { RichTextToolbarButton, RichTextShortcut } from '@wordpress/block-editor';
 
 registerFormatType( 'wp-yomigana/cite', {
 
@@ -27,7 +27,7 @@ registerFormatType( 'wp-yomigana/cite', {
       <Fragment>
         <RichTextShortcut type={shortcutType} character={shortcutCharacter} onUse={onToggle}  />
         <RichTextToolbarButton icon={icon} title={__( 'Cite', 'wp-yomigana' )} onClick={onToggle}
-          isActive={isActive} shorcutType={shortcutType} shorcutCharacter={shortcutCharacter} />
+          isActive={isActive} shortcutType={shortcutType} shortcutCharacter={shortcutCharacter} />
       </Fragment>
     )
   }

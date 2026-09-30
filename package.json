@@ -1,45 +1,35 @@
 {
   "name": "wp-yomigana",
-  "version": "2.0.0",
+  "private": true,
   "homepage": "https://wordpress.org/plugins/wp-yomigana/",
-  "description": "Gulp task for WP-Yomigana",
-  "main": "gulpfile.js",
+  "description": "Add ruby tag and some inline tags to WordPress editors.",
   "scripts": {
-    "start": "gulp build && gulp watch ",
-    "watch": "gulp watch ",
-    "gulp": "gulp",
-    "package": "gulp build",
-    "translate": "po2json languages/wp-yomigana-ja.po languages/wp-yomigana-ja-wp-yomigana-dl.json -f jed"
+    "start": "wp-env start",
+    "stop": "wp-env stop",
+    "env": "wp-env",
+    "cli": "wp-env run cli wp",
+    "test": "wp-env run tests-cli --env-cwd=wp-content/plugins/wp-yomigana vendor/bin/phpunit -c phpunit.xml.dist",
+    "package": "npm run build:css && npm run build:js",
+    "build:js": "wp-scripts build wp-yomigana-gutenberg=./assets/js/src/wp-yomigana-gutenberg.jsx definition-list=./assets/js/src/definition-list.jsx definition-term=./assets/js/src/definition-term.jsx definition-description=./assets/js/src/definition-description.jsx editor_plugin=./assets/js/src/editor_plugin.js editor-helper=./assets/js/src/editor-helper.js --output-path=assets/js/dist",
+    "build:css": "sass ./assets/scss/:./assets/css/ --style=compressed --no-source-map && postcss ./assets/css/*.css --use autoprefixer --replace --no-map",
+    "watch": "wp-scripts start wp-yomigana-gutenberg=./assets/js/src/wp-yomigana-gutenberg.jsx definition-list=./assets/js/src/definition-list.jsx definition-term=./assets/js/src/definition-term.jsx definition-description=./assets/js/src/definition-description.jsx editor_plugin=./assets/js/src/editor_plugin.js editor-helper=./assets/js/src/editor-helper.js --output-path=assets/js/dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hametuha/wp-yomigana.git"
   },
   "author": "Hametuha inc.",
-  "license": "GPL-3.0",
+  "license": "GPL-3.0-or-later",
+  "browserslist": [
+    "extends @wordpress/browserslist-config"
+  ],
   "devDependencies": {
-    "@babel/core": "^7.1.0",
-    "@babel/plugin-transform-react-jsx": "^7.0.0",
-    "@babel/preset-env": "^7.1.0",
-    "@wordpress/keycodes": "^2.0.0",
-    "babel-loader": "^8.0.2",
-    "event-stream": "^3.3.4",
-    "gulp": "^3.8.11",
-    "gulp-autoprefixer": "^5.0.0",
-    "gulp-babel": "^8.0.0",
-    "gulp-changed": "^3.2.0",
-    "gulp-imagemin": "^4.1.0",
-    "gulp-jshint": "^2.1.0",
-    "gulp-load-plugins": "^1.5.0",
-    "gulp-notify": "^3.2.0",
-    "gulp-plumber": "^1.0.0",
-    "gulp-sass": "^3.1.0",
-    "gulp-sourcemaps": "^2.6.4",
-    "gulp-uglify": "^3.0.0",
-    "imagemin-pngquant": "^5.0.1",
-    "jquery-ui-mp6": "^1.0.2",
-    "jshint": "^2.9.6",
-    "jshint-stylish": "^2.2.1",
-    "node-sass": "^4.9.3",
-    "po2json": "^1.0.0-alpha",
-    "vinyl-named": "^1.1.0",
-    "webpack": "^4.19.1",
-    "webpack-stream": "^5.1.1"
+    "@wordpress/browserslist-config": "^6.0.0",
+    "@wordpress/env": "^11.16.0",
+    "@wordpress/scripts": "^36.0.0",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "postcss-cli": "^11.0.0",
+    "sass": "^1.83.0"
   }
 }

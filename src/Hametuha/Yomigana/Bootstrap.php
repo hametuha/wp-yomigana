@@ -87,8 +87,8 @@ class Bootstrap extends Application {
 	 */
 	public function mce_helper( $setting ) {
 		if ( $setting['tinymce'] ) {
-			wp_enqueue_style( 'jquery-ui-mp6', plugins_url( 'assets/css/jquery-ui.css', $this->dir . '/assets' ), array(), '1.0.2' );
-			wp_enqueue_script( 'wp-yomigana-editor-helper', $this->assets . '/js/dist/editor-helper.js', array( 'jquery-ui-dialog' ), static::VERSION, true );
+			wp_enqueue_style( 'wp-jquery-ui-dialog' );
+			wp_enqueue_script( 'wp-yomigana-editor-helper', $this->assets . '/js/dist/editor-helper.js', array( 'jquery-ui-dialog' ), $this->version, true );
 			wp_localize_script(
 				'wp-yomigana-editor-helper',
 				'WpYomigana',
@@ -102,7 +102,7 @@ class Bootstrap extends Application {
 					'cite'      => __( 'Cite', 'wp-yomigana' ),
 					'ruby'      => __( 'Ruby', 'wp-yomigana' ),
 					'rubyForm'  => $this->get_template_string( 'ruby' ),
-					'imageBase' => $this->assets . '/img/dist/',
+					'imageBase' => $this->assets . '/img/',
 					'close'     => __( 'Cancel', 'wp-yomigana' ),
 					'ok'        => __( 'OK', 'wp-yomigana' ),
 					'unwrap'    => __( 'Delete', 'wp-yomigana' ),

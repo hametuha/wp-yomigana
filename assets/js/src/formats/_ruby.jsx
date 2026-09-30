@@ -1,8 +1,7 @@
-const { Fragment } = wp.element;
-const { __, sprintf } = wp.i18n;
-const { toggleFormat, registerFormatType, insert, applyFormat } = wp.richText;
-const { RichTextToolbarButton, RichTextShortcut } = wp.editor;
-const { SVG, Path } = wp.components;
+import { Fragment } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
+import { toggleFormat, registerFormatType, insert, applyFormat } from '@wordpress/rich-text';
+import { RichTextToolbarButton, RichTextShortcut } from '@wordpress/block-editor';
 
 registerFormatType( 'wp-yomigana/rt', {
 
@@ -62,12 +61,11 @@ registerFormatType( 'wp-yomigana/ruby', {
         <circle cx="179" cy="47" r="23"/>
       </svg>
     );
-    const shortcut = sprintf( '(%s+Alt+R)', /(MAC|IP)/.test( navigator.platform.toUpperCase() ) ? '⌘' : 'Ctrl' );
     return (
       <Fragment>
         <RichTextShortcut type={shortcutType} character={shortcutCharacter} onUse={onToggle}  />
-        <RichTextToolbarButton icon={icon} title={ __( 'Ruby', 'wp-yomigana' ) + ' (⌘+Alt+R)' } onClick={onToggle}
-                               isActive={isActive} shorcutType={shortcutType} shorcutCharacter={shortcutCharacter} />
+        <RichTextToolbarButton icon={icon} title={ __( 'Ruby', 'wp-yomigana' ) } onClick={onToggle}
+                               isActive={isActive} shortcutType={shortcutType} shortcutCharacter={shortcutCharacter} />
       </Fragment>
     )
   }

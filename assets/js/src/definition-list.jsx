@@ -1,8 +1,12 @@
-const { registerBlockType } = wp.blocks;
-const { InnerBlocks } = wp.editor;
-const { __ } = wp.i18n;
+import { registerBlockType } from '@wordpress/blocks';
+import { InnerBlocks, useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
+import { __ } from '@wordpress/i18n';
+
+const allowedBlocks = [ 'wp-yomigana/term', 'wp-yomigana/description' ];
 
 registerBlockType( 'wp-yomigana/dl', {
+
+  apiVersion: 3,
 
   title: __( 'Definition List', 'wp-yomigana' ),
 
@@ -17,22 +21,18 @@ registerBlockType( 'wp-yomigana/dl', {
     </svg>
   ),
 
-  category: 'common',
+  category: 'text',
 
   keywords: [],
 
-  edit({attributes, className}){
-    const allowedBlocks = [ 'wp-yomigana/term', 'wp-yomigana/description' ];
-    return (
-      <div className={className}>
-        <InnerBlocks allowedBlocks={allowedBlocks} templateLock={false} />
-      </div>
-    )
+  edit(){
+    const innerBlocksProps = useInnerBlocksProps( useBlockProps(), { allowedBlocks, templateLock: false } );
+    return <div { ...innerBlocksProps } />;
   },
 
-  save({className}){
+  save(){
     return (
-      <dl className={className}>
+      <dl { ...useBlockProps.save() }>
         <InnerBlocks.Content />
       </dl>
     )

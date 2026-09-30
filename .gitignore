@@ -1,12 +1,11 @@
 .svn
-/package-lock.json
-/composer.lock
 /node_modules/
 /vendor/
-/bower_components/
-.sass-cache
 /readme.txt
+/wp-yomigana.zip
+/.wp-env.override.json
+/.playwright-mcp/
 assets/css
-assets/images
 assets/js/dist
-assets/img/dist
+/tasks/
+.phpunit.result.cache
