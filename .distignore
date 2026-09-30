@@ -6,6 +6,7 @@
 .idea
 .node-version
 .wp-env.json
+.wordpress-org
 node_modules
 package.json
 package-lock.json
