@@ -41,7 +41,7 @@ class Gutenberg extends Application {
 			$asset['version'],
 			true
 		);
-		wp_set_script_translations( $handle, 'wp-yomigana', $this->dir . '/languages' );
+		wp_set_script_translations( $handle, 'wp-yomigana' );
 	}
 
 	/**

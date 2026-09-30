@@ -81,7 +81,7 @@
 		<div class="yomigana-example">
 			<h4 class="yomigana-example-title"><?php echo esc_html( $tag ); ?></h4>
 			<p class="yomigana-example-html">
-				<?php echo $html; ?>
+				<?php echo wp_kses_post( $html ); ?>
 			</p>
 			<pre class="yomigana-example-code"><?php echo esc_html( $html ); ?></pre>
 		</div>
