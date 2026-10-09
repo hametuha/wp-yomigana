@@ -1,0 +1,89 @@
+name: Claude Code PR Review
+
+on:
+  workflow_run:
+    workflows: ["WordPress Plugin Test"]
+    types: [completed]
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+  id-token: write
+
+jobs:
+  # CI 全パス後の自動レビュー（同一リポジトリのPRのみ）
+  setup:
+    if: |
+      github.event_name == 'workflow_run' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-latest
+    outputs:
+      pr_number: ${{ steps.pr.outputs.number }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Get PR number
+        id: pr
+        run: |
+          PR_NUMBER=$(gh pr list --head "${{ github.event.workflow_run.head_branch }}" --json number --jq '.[0].number')
+          echo "number=$PR_NUMBER" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+  auto-review:
+    needs: setup
+    if: needs.setup.outputs.pr_number != ''
+    uses: tarosky/workflows/.github/workflows/claude-review.yml@main
+    with:
+      plugin_name: wp-yomigana
+      ci_checks: "PHPStan Level 5, PHPCS, PHP lint, asset build"
+      pr_number: ${{ fromJSON(needs.setup.outputs.pr_number) }}
+      head_sha: ${{ github.event.workflow_run.head_sha }}
+      custom_focus: |
+        - ブロックエディター（RichText format）とTinyMCE の両対応が崩れていないか
+        - ruby 等のインラインタグが KSES やシリアライズで欠落しないか
+    secrets:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
+  # "@claude auto-review" で手動レビュー（メンバーのみ、PRコメントのみ）
+  manual-setup:
+    if: |
+      github.event_name == 'issue_comment' &&
+      contains(github.event.comment.body, '@claude auto-review') &&
+      github.event.issue.pull_request &&
+      contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)
+    runs-on: ubuntu-latest
+    outputs:
+      pr_number: ${{ steps.pr.outputs.number }}
+      head_sha: ${{ steps.pr.outputs.head_sha }}
+    steps:
+      - name: Get PR info
+        id: pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          PR_NUMBER=${{ github.event.issue.number }}
+          HEAD_SHA=$(gh pr view "$PR_NUMBER" --repo "${{ github.repository }}" --json headRefOid --jq '.headRefOid')
+          echo "number=$PR_NUMBER" >> $GITHUB_OUTPUT
+          echo "head_sha=$HEAD_SHA" >> $GITHUB_OUTPUT
+
+  manual-review:
+    needs: manual-setup
+    if: needs.manual-setup.outputs.pr_number != ''
+    uses: tarosky/workflows/.github/workflows/claude-review.yml@main
+    with:
+      plugin_name: wp-yomigana
+      ci_checks: "PHPStan Level 5, PHPCS, PHP lint, asset build"
+      pr_number: ${{ fromJSON(needs.manual-setup.outputs.pr_number) }}
+      head_sha: ${{ needs.manual-setup.outputs.head_sha }}
+      is_manual: true
+      custom_focus: |
+        - ブロックエディター（RichText format）とTinyMCE の両対応が崩れていないか
+        - ruby 等のインラインタグが KSES やシリアライズで欠落しないか
+    secrets:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
