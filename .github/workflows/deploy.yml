@@ -33,7 +33,7 @@ jobs:
       - name: Build package
         run: |
           composer install --no-dev --prefer-dist --no-progress
-          npm ci --no-audit --no-fund
+          npm ci --ignore-scripts
           npm run package
 
       - name: Generate readme.txt
