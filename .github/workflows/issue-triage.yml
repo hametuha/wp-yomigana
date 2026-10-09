@@ -11,6 +11,11 @@ on:
         type: string
         default: '30'
 
+permissions:
+  contents: read
+  issues: write
+  id-token: write
+
 jobs:
   triage:
     uses: tarosky/workflows/.github/workflows/issue-triage.yml@main
