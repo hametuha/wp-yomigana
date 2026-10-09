@@ -14,4 +14,4 @@ jobs:
       (github.event.action != 'labeled' || github.event.label.name == 'playground')
     uses: tarosky/workflows/.github/workflows/playground-preview-build.yml@main
     with:
-      build_command: 'composer install --no-dev --prefer-dist && npm ci && npm run package'
+      build_command: 'composer install --no-dev --prefer-dist && npm ci --ignore-scripts && npm run package'
