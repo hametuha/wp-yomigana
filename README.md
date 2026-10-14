@@ -35,6 +35,12 @@ License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 特にこだわりがないのであれば、管理画面 > プラグイン > 新規追加からインストールすることをお勧めします。
 
+## Frequently Asked Questions
+
+### Where do I report security bugs found in this plugin?
+
+Please do not post it publicly. Report security bugs through the [Patchstack Vulnerability Disclosure Program](https://patchstack.com/database/report/wordpress/plugin/wp-yomigana). The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this plugin.
+
 ##  Screenshots 
 
 1. ブロックエディターではプルダウンに「ルビ」があります。
