@@ -1,25 +1,57 @@
-.claude
-.distignore
-.editorconfig
+# .distignore: files excluded from the WordPress.org package.
+# Runtime files that MUST ship: wp-yomigana.php, uninstall.php, src/ (PSR-0 classes),
+# templates/, vendor/ (+ composer.json), assets/css, assets/js/dist, assets/img,
+# LISENCE, readme.txt (generated from README.md on deploy).
+
+# VCS / CI / editor
 .git
 .github
 .gitignore
+.distignore
+.editorconfig
 .idea
-.node-version
-.wp-env.json
-.wordpress-org
+.DS_Store
+.svn
+
+# AI agent / task files
+.claude
+CLAUDE.md
+/tasks
+/.playwright-mcp
+
+# WordPress.org assets (deployed separately to /assets on SVN)
+/.wordpress-org
+
+# Local environment
+/.wp-env.json
+/.wp-env.override.json
+/.node-version
+
+# Node.js / build-only sources
 node_modules
-package.json
-package-lock.json
-phpcs.ruleset.xml
-phpstan.neon
-phpstan-baseline.neon
-phpstan-bootstrap.php
-phpunit.xml.dist
-composer.json
-composer.lock
-README.md
-tasks
-tests
-languages
-assets/icons
+/package.json
+/package-lock.json
+/assets/js/src
+/assets/scss
+/assets/icons
+
+# Composer (composer.json is kept because vendor/autoload.php ships)
+/composer.lock
+
+# PHP lint / static analysis / tests
+/phpcs.ruleset.xml
+/phpstan.neon
+/phpstan-baseline.neon
+/phpstan-bootstrap.php
+/phpunit.xml.dist
+/.phpunit.result.cache
+/tests
+
+# Docs (readme.txt is generated from README.md on deploy)
+/README.md
+
+# Not used at runtime (translations come from WordPress.org language packs)
+/languages
+
+# Build artifacts
+/wp-yomigana.zip
