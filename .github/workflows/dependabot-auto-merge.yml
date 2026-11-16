@@ -1,8 +1,8 @@
 name: Dependabot auto-merge
 
-# Dependabot の minor / patch 更新に自動マージを設定する。
+# Dependabot の minor / patch 更新と、脆弱性グループの推移的依存の更新に自動マージを設定する。
 # 実際のマージは、ルールセットの必須チェック（Status Check）が通った時点で GitHub が行う。
-# major 更新と、更新の種類が判定できないもの（空）は対象外で、人がレビューする。
+# major 更新と、それ以外で更新の種類が判定できないものは対象外で、人がレビューする。
 on: pull_request
 
 permissions:
@@ -21,10 +21,19 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Enable auto-merge for minor and patch updates
+      # 1) minor / patch 更新
+      # 2) 脆弱性グループ（*-security）の推移的依存の更新
+      #    推移的依存は fetch-metadata が update-type を判定できず空になるため、
+      #    major と判定されたものだけを除外する（壊れれば必須チェックで止まる）
+      - name: Enable auto-merge
         if: >-
           steps.metadata.outputs.update-type == 'version-update:semver-minor' ||
-          steps.metadata.outputs.update-type == 'version-update:semver-patch'
+          steps.metadata.outputs.update-type == 'version-update:semver-patch' ||
+          (
+            endsWith(steps.metadata.outputs.dependency-group, '-security') &&
+            steps.metadata.outputs.dependency-type == 'indirect' &&
+            steps.metadata.outputs.update-type != 'version-update:semver-major'
+          )
         run: gh pr merge --auto --squash "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
